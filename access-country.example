@@ -1,2 +1,14 @@
+# access-country - The country access policy map used by pcps.pl
+#
+# By default, this should be installed to to: /etc/postfix/access-country
+#
+# The left-hand key is a two-letter country code.
+# The right-hand value is a Postfix access(5) disposition.
+#
+# This file is NOT SUITABLE actual use -- it's used by the test cases
+# in the "test" subdirectory.
+#
+
 US	OK
 CA	REJECT
+
