@@ -1,0 +1,10 @@
+This directory runs a number of test cases to ensure pcps.pl is running correctly.
+
+You can run all the test cases with:
+
+	sh run-tests.sh
+
+Example output from a successful run is in run-tests.out.
+
+These test cases use the access policy map in ../access-country.example.
+
