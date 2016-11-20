@@ -25,6 +25,7 @@ use constant USAGE => "usage: $0 [-dhtq] [-M ACCESS_MAP] (try \"-h\" for help)\n
 use constant DEFAULT_ACCESS_MAP => "/etc/postfix/access-country.db";
 
 # Result to return when no policy applies to this address.
+# Change this by addding a "default" entry in the access map.
 use constant DUNNO => "dunno";
 
 sub show_help {
@@ -141,6 +142,11 @@ our $ACCESS_MAP = $opts{'M'} || DEFAULT_ACCESS_MAP;
 syslog(LOG_DEBUG, "debug: opening access map: $ACCESS_MAP");
 tie %DB_ACCESS, 'DB_File', $ACCESS_MAP, O_RDONLY;
 
+# Initially, the default access policy is set to DUNNO.
+# This can be overridden by specifying a "default" entry in the access map.
+our $DEFAULT_ACCESS = DUNNO;
+
+
 # Lookup a country in the access map.  The access map keys are two-letter
 # country codes (in lower case) with an appended NUL byte.
 #
@@ -148,8 +154,11 @@ sub lookup_access {
 	die "usage: lookup_access COUNTRY" unless (@_ == 1);
 	my($country) = @_;
 	my $key = lc($country) . "\0";
-	return $DB_ACCESS{$key};
+	return $DB_ACCESS{$key} || $DEFAULT_ACCESS;
 }
+
+# Update the default value if one is defined in the access map.
+$DEFAULT_ACCESS = lookup_access("default");
 
 
 # Process a request and determine policy result.
@@ -164,7 +173,7 @@ sub process_request {
 	}
 	if (is_ipv6($client)) {
 		syslog(LOG_WARNING, "warning: cannot process IPv6: client=$client");
-		return ($client, "", DUNNO);
+		return ($client, "", $DEFAULT_ACCESS);
 	}
 	if (! is_ipv4($client)) {
 		fatal("invalid IPv4 address: client=$client");
@@ -173,10 +182,10 @@ sub process_request {
 	my $country = lookup_country($client) || "";
 	if (! $country) {
 		syslog(LOG_WARNING, "warning: country lookup failed: client=$client");
-		return ($client, "", DUNNO);
+		return ($client, "", $DEFAULT_ACCESS);
 	}
 
-	my $result = lookup_access($country) || DUNNO;
+	my $result = lookup_access($country);
 	return ($client, $country, $result);
 }
 

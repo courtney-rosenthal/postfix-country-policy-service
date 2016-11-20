@@ -9,6 +9,11 @@
 # in the "test" subdirectory.
 #
 
+### # The default access policy is "dunno".
+### # If you want to change that, define a "default" entry.
+###default OK
+
 US	OK
 CA	REJECT
+MX	dunno
 

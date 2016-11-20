@@ -74,9 +74,7 @@ What this example does:
 
     * Senders with a country policy of "REJECT" are rejected, before attempting greylisting.
 
-    * Senders with a country policy of "dunno" are subject to greylisting.
-
-    * The default policy for a country not listed is "dunno".
+    * Senders that do not have a listed country policy are subject to greylisting.
 
 
 ### Create country access policy map
@@ -87,7 +85,35 @@ The "access-country.example" included with this package illustrates the
 format. The "access-country.example" file IS NOT SUITABLE for installation
 on a live system.
 
-When you are done, hash the map:
+Some values commonly used are:
+
+    * OK - Processing of the restrictions list stops and the message is acepted
+
+    * REJECT - Processing of the restrictions list stops and the message is rejected.
+
+    * dunno - Processing of the restrictions list continues with the next entry.
+
+Normally, if a country is not specified in the access file the policy will be set to "dunno".
+To change this default value, add an entry named "default".
+
+Here is an example access-country file:
+
+    US OK
+    CA REJECT
+
+When used with greylisting (as shown in the previous smtpd_recipient_restrictions list), senders
+from US will be accepted (without greylisting), senders from CA will be rejected (without greylisting),
+and senders from all other countries will be greylisted.
+
+Here is another example:
+
+    default OK
+    US dunno
+
+In this example, senders from US will be subject to greylisting, and
+senders from all other countries will be accepted without greylisting.
+
+When you are done setting up the file, hash the map:
 
     $ sudo postmap /etc/postfix/access-country
 

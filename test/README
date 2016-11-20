@@ -8,3 +8,10 @@ Example output from a successful run is in run-tests.out.
 
 These test cases use the access policy map in ../access-country.example.
 
+The expected results are:
+
+	* US => OK
+	* CA => REJECT
+	* MX => dunno
+	* CN => default policy => dunno
+
