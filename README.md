@@ -22,6 +22,11 @@ Besides Postfix, you'll need to install a few support packages. Run:
 
     # apt-get install geoip-database libgeo-ipfree-perl
 
+You can verify your environment by running:
+
+    $ cd test
+    $ sh run-tests.sh
+
 
 ### Install pcps.pl
 
@@ -36,7 +41,7 @@ You can do this by running:
 
 Add the following to your /etc/postfix/master.cf file:
 
-    country-policy unix -   n       n       -       0       spawn
+    country-policy unix -   n       n       -       10      spawn
       user=nobody argv=/usr/lib/postfix/pcps.pl       
   
 
@@ -69,7 +74,9 @@ What this example does:
 
     * Senders with a country policy of "REJECT" are rejected, before attempting greylisting.
 
-    * Senders without a listed country policy (the default) are subject to greylisting.
+    * Senders with a country policy of "dunno" are subject to greylisting.
+
+    * The default policy for a country not listed is "dunno".
 
 
 ### Create country access policy map
