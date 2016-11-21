@@ -7,6 +7,9 @@ not subject to greylisting.
 
 This service has been tested on Debian Jessie (version 8) Linux.
 
+It uses the GeoIP database that's provided in Debian Linux (and
+derivatives such as Ubuntu Linux) as the "geoip-database" package.
+
 Please note that this service is NOT well suited for high volume mail
 servers. It has a moderate amount of overhead connecting to the country
 and policy databases for each mail delivery. A better design would be
