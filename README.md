@@ -51,31 +51,37 @@ Add the following to your /etc/postfix/master.cf file:
 ### Implement country-policy restrictions
 
 Edit your /etc/postfix/main.cf file and modify the
-"smtpd_recipient_restrictions" similar to the following:
+"smtpd_recipient_restrictions" to run the "country-policy" service.
+
+For Postfix version 2.10 and later, you should have your
+relay restrictions in "smtpd_relay_restrictions". The
+"smtpd_recipient_restrictions" setting contains the additional
+restrictions that typically are not applied when authorized
+clients use the mail submission (TCP/587) service.
+
+Here is what I use on my system:
+
+    smtpd_relay_restrictions =
+        check_recipient_access hash:$config_directory/access,
+        permit_tls_clientcerts,
+        permit_sasl_authenticated,
+        permit_mynetworks,
+        reject_unauth_destination,
 
     smtpd_recipient_restrictions =
-	check_recipient_access hash:$config_directory/access,
-	permit_tls_clientcerts,
-	permit_sasl_authenticated,
-	permit_mynetworks,
-	reject_unauth_destination,
-        check_policy_service unix:private/country-policy, <<< ADDED
+        # the next line implements access policy by country
+        check_policy_service unix:private/country-policy,
+        # the next line implements "postgrey" grey listing
         check_policy_service inet:127.0.0.1:10023
 
-In this example, the marked line was added to implement the
-country access policy.
+The "check_policy_service unix:private/country-policy" line implements
+the access policy by country service.
 
-It is important that you have a "reject_unauth_destination" entry
-BEFORE the country access policy entry.
-
-The "check_policy_service inet:127.0.0.1:10023" entry is for
-the "postgrey" service as implemented on Debian.
-
-What this example does:
+This example implements the following:
 
     * Senders with a country policy of "OK" are accepted, without running greylisting.
 
-    * Senders with a country policy of "REJECT" are rejected, before attempting greylisting.
+    * Senders with a country policy of "REJECT" are rejected, without attempting greylisting.
 
     * Senders that do not have a listed country policy are subject to greylisting.
 
