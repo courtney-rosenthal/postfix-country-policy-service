@@ -12,7 +12,6 @@ use strict;
 use warnings;
 
 use Getopt::Std;
-use Pod::Usage;
 use File::Basename;
 use Sys::Syslog qw(:standard :macros);
 use Data::Validate::IP qw(is_ipv4 is_ipv6);
