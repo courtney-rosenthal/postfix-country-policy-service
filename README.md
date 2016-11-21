@@ -21,11 +21,21 @@ requests.
 
 ### Prerequisites
 
-Besides Postfix, you'll need to install a few support packages. Run:
+Besides Postfix, you'll need to install a few support packages.
+
+On Debian Linux, run:
 
     # apt-get install geoip-database libgeo-ipfree-perl
 
-You can verify your environment by running:
+On Ubuntu Linux, run:
+
+    # apt-get install geoip-database libgeo-ipfree-perl libdata-validate-ip-perl
+
+You can verify the prerequisites by running:
+
+    $ perl -h pcps.pl
+
+You can verify the package is working correctly by running:
 
     $ cd test
     $ sh run-tests.sh
@@ -77,7 +87,7 @@ Here is what I use on my system:
 The "check_policy_service unix:private/country-policy" line implements
 the access policy by country service.
 
-This example implements the following:
+This setup allows me to implement the following policy:
 
     * Senders with a country policy of "OK" are accepted, without running greylisting.
 
@@ -122,7 +132,11 @@ Here is another example:
 In this example, senders from US will be subject to greylisting, and
 senders from all other countries will be accepted without greylisting.
 
-When you are done setting up the file, hash the map:
+
+### Hash the access map
+
+Once you've created the countryh access policy map (described above),
+hash the map:
 
     $ sudo postmap /etc/postfix/access-country
 
@@ -157,4 +171,7 @@ Chip Rosenthal
 <chip@unicom.com>
 
 This package is published at: https://github.com/chip-rosenthal/postfix-country-policy-service
+
+This is free and unencumbered software released into the public domain.
+See LICENSE file for full info.
 
