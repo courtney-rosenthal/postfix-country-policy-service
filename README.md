@@ -33,7 +33,7 @@ On Ubuntu Linux, run:
 
 You can verify the prerequisites by running:
 
-    $ perl -h pcps.pl
+    $ perl pcps.pl -h
 
 You can verify the package is working correctly by running:
 
@@ -89,11 +89,11 @@ the access policy by country service.
 
 This setup allows me to implement the following policy:
 
-    * Senders with a country policy of "OK" are accepted, without running greylisting.
+* Senders with a country policy of "OK" are accepted, without running greylisting.
 
-    * Senders with a country policy of "REJECT" are rejected, without attempting greylisting.
+* Senders with a country policy of "REJECT" are rejected, without attempting greylisting.
 
-    * Senders that do not have a listed country policy are subject to greylisting.
+* Senders that do not have a listed country policy are subject to greylisting.
 
 
 ### Create country access policy map
@@ -106,11 +106,11 @@ on a live system.
 
 Some values commonly used are:
 
-    * OK - Processing of the restrictions list stops and the message is acepted
+* OK - Processing of the restrictions list stops and the message is acepted
 
-    * REJECT - Processing of the restrictions list stops and the message is rejected.
+* REJECT - Processing of the restrictions list stops and the message is rejected.
 
-    * dunno - Processing of the restrictions list continues with the next entry.
+* dunno - Processing of the restrictions list continues with the next entry.
 
 Normally, if a country is not specified in the access file the policy will be set to "dunno".
 To change this default value, add an entry named "default".
