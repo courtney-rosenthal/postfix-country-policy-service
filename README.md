@@ -66,7 +66,7 @@ Here is what I use on my system:
         permit_tls_clientcerts,
         permit_sasl_authenticated,
         permit_mynetworks,
-        reject_unauth_destination,
+        reject_unauth_destination
 
     smtpd_recipient_restrictions =
         # the next line implements access policy by country
