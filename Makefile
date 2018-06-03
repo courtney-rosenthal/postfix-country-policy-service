@@ -1,4 +1,4 @@
-DIR_LIB = /usr/lib/postfix
+DIR_LIB = /usr/libexec/postfix
 
 ALL = pcps.pl
 
@@ -10,4 +10,3 @@ install : $(INSTALL)
 
 $(DIR_LIB)/pcps.pl : pcps.pl
 	install -m 555 $< $@
-
