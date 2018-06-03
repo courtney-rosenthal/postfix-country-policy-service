@@ -43,7 +43,7 @@ You can verify the package is working correctly by running:
 
 ### Install pcps.pl
 
-Install pcps.pl to /usr/lib/postfix/pcps.pl
+Install pcps.pl to /usr/libexec/postfix/pcps.pl
 
 You can do this by running:
 
@@ -55,7 +55,7 @@ You can do this by running:
 Add the following to your /etc/postfix/master.cf file:
 
     country-policy unix -   n       n       -       10      spawn
-      user=nobody argv=/usr/lib/postfix/pcps.pl       
+      user=nobody argv=/usr/libexec/postfix/pcps.pl       
   
 
 ### Implement country-policy restrictions
@@ -164,6 +164,29 @@ You can enable debug logging by modifying your "/etc/postfix/master.cf" file
 and adding "-v" to the end of the pcps.pl command line. Be sure to reload
 postfix.service after doing this.
 
+
+## Ansible Playbook
+
+The following plays can be used to install this utility using Ansible on a RHEL-like system:
+
+    - name: Download Postfix Country Policy Server
+      get_url:
+        url: https://raw.githubusercontent.com/chip-rosenthal/postfix-country-policy-service/master/pcps.pl
+        dest: /usr/libexec/postfix/pcps.pl
+        mode: 0555
+
+    - name: Install Perl cpanm utility
+      yum:
+        name: perl-App-cpanminus
+        state: present
+
+    - name: Install Perl Geo::IPfree module
+      cpanm:
+        name: Geo::IPfree
+
+    - name: Install Perl Data::Validate::IP module
+      cpanm:
+        name: Data::Validate::IP
 
 ## Author
 
